@@ -16,6 +16,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import verona1024.com.cafe.fragments.BillFragment;
+import verona1024.com.cafe.fragments.MainFragment;
+
 public class CafeMain extends Activity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -23,7 +26,7 @@ public class CafeMain extends Activity {
 
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private String[] mPlanetTitles;
+    private String[] dishesTitles;
     private CafeMain mContext;
 
     @Override
@@ -34,18 +37,18 @@ public class CafeMain extends Activity {
         ViewPager vp = (ViewPager) findViewById(R.id.viewpager);
         CustomPagerAdapter adapter = new CustomPagerAdapter(mContext);
         vp.setAdapter(adapter);
-        vp.setPageTransformer(false, new ViewPager.PageTransformer() {
-
-            @Override
-            public void transformPage(View page, float position) {
-                final float normalizedposition = Math.abs(Math.abs(position) - 1);
-                page.setScaleX(normalizedposition / 2 + 0.5f);
-                page.setScaleY(normalizedposition / 2 + 0.5f);
-            }
-        });
+//        vp.setPageTransformer(false, new ViewPager.PageTransformer() {
+//
+//            @Override
+//            public void transformPage(View page, float position) {
+//                final float normalizedposition = Math.abs(Math.abs(position) - 1);
+//                page.setScaleX(normalizedposition / 2 + 0.5f);
+//                page.setScaleY(normalizedposition / 2 + 0.5f);
+//            }
+//        });
 
         mTitle = mDrawerTitle = getTitle();
-        mPlanetTitles = getResources().getStringArray(R.array.planets_array);
+        dishesTitles = getResources().getStringArray(R.array.dishes_tetles);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -54,7 +57,7 @@ public class CafeMain extends Activity {
 //        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));
+                R.layout.drawer_list_item, dishesTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
@@ -129,7 +132,7 @@ public class CafeMain extends Activity {
 
         // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(mPlanetTitles[position]);
+        setTitle(dishesTitles[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
@@ -169,14 +172,21 @@ public class CafeMain extends Activity {
             // View page = pages.get(position);
             View view = null;
             if (position == 0) {
-                view = inflater.inflate(R.layout.page_one_views, null);
+                Bundle b = new Bundle();
+                b.putString("msg", "");
+                MainFragment ff = new MainFragment();
+                view = ff.onCreateView(inflater,container,b);
                 ((ViewPager) container).addView(view);
 
             }
             else {
                 // page.setBackgroundColor(colors.get(position));
                 // container.addView(page);
-                view = inflater.inflate(R.layout.page_two, null);
+//                view = inflater.inflate(R.layout.page_bill_views, null);
+                Bundle b = new Bundle();
+                b.putString("msg", "");
+                BillFragment ff = new BillFragment();
+                view = ff.onCreateView(inflater,container,b);
                 ((ViewPager) container).addView(view);
             }
             return view;
